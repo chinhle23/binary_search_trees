@@ -37,10 +37,28 @@ class Tree
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
+
+  def insert(root = @root, value)
+    node = Node.new(value)
+
+    if root.nil?
+      root = node
+    else
+      return root if root.data == value
+
+      if root.data < value
+        root.right = insert(root.right, value)
+      else 
+        root.left = insert(root.left, value)
+      end
+    end
+    
+    root
+  end
 end
 
 array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 
 binary_search_tree = Tree.new(array)
-
+binary_search_tree.insert(1000)
 binary_search_tree.pretty_print
