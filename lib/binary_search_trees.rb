@@ -76,6 +76,18 @@ class Tree
     root
   end
 
+  def find(value, root = @root)
+    return nil if root.nil?
+
+    return root if value == root.data
+
+    if value < root.data
+      root.left = find(value, root.left)
+    elsif value > root.data
+      root.right = find(value, root.right)
+    end
+  end
+
   private
 
   def min_value(root)
@@ -99,4 +111,4 @@ binary_search_tree.delete(1)
 binary_search_tree.pretty_print
 binary_search_tree.insert(2)
 binary_search_tree.pretty_print
-p binary_search_tree
+p binary_search_tree.find(676)
