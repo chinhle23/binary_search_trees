@@ -88,38 +88,43 @@ class Tree
     end
   end
 
-  def level_order(queue = [], values = [], root = @root)
-    return nil if root.nil?
+  def level_order(queue = [], node = @root)
+    return if node.nil?
 
-    queue.push(root)
+    queue << node
+    values = []
 
-    # iteration approach
-    # until queue.empty?
-    #   current_node = queue[0]
-    #   values.push(current_node.data)
-    #   queue.push(current_node.left) unless current_node.left.nil?
-    #   queue.push(current_node.right) unless current_node.right.nil?
-    #   queue.shift
-    # end
+    until queue.empty?
+      current_node = queue.shift
 
-    # recursion approach
-    current_node = queue[0]
-    queue.shift
-    values.push(current_node.data)
-    level_order(queue, values, current_node.left) unless current_node.left.nil?
-    level_order(queue, values, current_node.right) unless current_node.right.nil?
-
-    result = []
-
-    values.each do |value|
       if block_given?
-        result.push(yield value)
+        values.push(yield current_node)
       else
-        result << value
+        values << current_node.data
       end
+
+      queue.push(current_node.left) unless current_node.left.nil?
+      queue.push(current_node.right) unless current_node.right.nil?
     end
 
-    result
+    values
+  end
+
+  def level_order_rec(queue = [], values = [], node = @root, &block)
+    return if node.nil?
+
+    if block_given?
+      values.push(yield node)
+    else
+      values << node.data
+    end
+
+    queue << node.left unless node.left.nil?
+    queue << node.right unless node.right.nil?
+
+    level_order_rec(queue, values, queue.shift, &block)
+
+    values
   end
 
   def height(node)
@@ -151,4 +156,4 @@ binary_search_tree.insert(1000)
 # binary_search_tree.pretty_print
 # binary_search_tree.insert(2)
 binary_search_tree.pretty_print
-p binary_search_tree.height(binary_search_tree.root.left)
+p binary_search_tree.level_order_rec
