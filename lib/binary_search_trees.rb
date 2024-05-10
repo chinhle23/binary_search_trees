@@ -94,13 +94,20 @@ class Tree
     queue.push(root)
 
     # iteration approach
-    until queue.empty?
-      current_node = queue[0]
-      values.push(current_node.data)
-      queue.push(current_node.left) unless current_node.left.nil?
-      queue.push(current_node.right) unless current_node.right.nil?
-      queue.shift
-    end
+    # until queue.empty?
+    #   current_node = queue[0]
+    #   values.push(current_node.data)
+    #   queue.push(current_node.left) unless current_node.left.nil?
+    #   queue.push(current_node.right) unless current_node.right.nil?
+    #   queue.shift
+    # end
+
+    # recursion approach
+    current_node = queue[0]
+    queue.shift
+    values.push(current_node.data)
+    level_order(queue, values, current_node.left) unless current_node.left.nil?
+    level_order(queue, values, current_node.right) unless current_node.right.nil?
 
     result = []
 
@@ -138,4 +145,4 @@ binary_search_tree = Tree.new(array)
 # binary_search_tree.pretty_print
 # binary_search_tree.insert(2)
 binary_search_tree.pretty_print
-p (binary_search_tree.level_order { |item| item * 11 })
+p binary_search_tree.level_order
