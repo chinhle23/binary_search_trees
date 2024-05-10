@@ -88,6 +88,33 @@ class Tree
     end
   end
 
+  def level_order(queue = [], values = [], root = @root)
+    return nil if root.nil?
+
+    queue.push(root)
+
+    # iteration approach
+    until queue.empty?
+      current_node = queue[0]
+      values.push(current_node.data)
+      queue.push(current_node.left) unless current_node.left.nil?
+      queue.push(current_node.right) unless current_node.right.nil?
+      queue.shift
+    end
+
+    result = []
+
+    values.each do |value|
+      if block_given?
+        result.push(yield value)
+      else
+        result << value
+      end
+    end
+
+    result
+  end
+
   private
 
   def min_value(root)
@@ -105,10 +132,10 @@ end
 array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 
 binary_search_tree = Tree.new(array)
-binary_search_tree.insert(1000)
+# binary_search_tree.insert(1000)
+# binary_search_tree.pretty_print
+# binary_search_tree.delete(1)
+# binary_search_tree.pretty_print
+# binary_search_tree.insert(2)
 binary_search_tree.pretty_print
-binary_search_tree.delete(1)
-binary_search_tree.pretty_print
-binary_search_tree.insert(2)
-binary_search_tree.pretty_print
-p binary_search_tree.find(676)
+p (binary_search_tree.level_order { |item| item * 11 })
