@@ -122,6 +122,12 @@ class Tree
     result
   end
 
+  def height(node)
+    return -1 if node.nil?
+
+    [height(node.left), height(node.right)].max + 1
+  end
+
   private
 
   def min_value(root)
@@ -139,10 +145,10 @@ end
 array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 
 binary_search_tree = Tree.new(array)
-# binary_search_tree.insert(1000)
+binary_search_tree.insert(1000)
 # binary_search_tree.pretty_print
 # binary_search_tree.delete(1)
 # binary_search_tree.pretty_print
 # binary_search_tree.insert(2)
 binary_search_tree.pretty_print
-p binary_search_tree.level_order
+p binary_search_tree.height(binary_search_tree.root.left)
