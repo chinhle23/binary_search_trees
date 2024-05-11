@@ -127,6 +127,52 @@ class Tree
     values
   end
 
+  def preorder(values = [], node = @root, &block)
+    return if node.nil?
+
+    if block_given?
+      values.push(yield node)
+    else
+      values << node.data
+    end
+
+    preorder(values, node.left, &block) unless node.left.nil?
+    preorder(values, node.right, &block) unless node.right.nil?
+
+    values
+  end
+
+  def inorder(values = [], node = @root, &block)
+    return if node.nil?
+
+    inorder(values, node.left, &block) unless node.left.nil?
+
+    if block_given?
+      values.push(yield node)
+    else
+      values << node.data
+    end
+
+    inorder(values, node.right, &block) unless node.right.nil?
+
+    values
+  end
+
+  def postorder(values = [], node = @root, &block)
+    return if node.nil?
+
+    postorder(values, node.left, &block) unless node.left.nil?
+    postorder(values, node.right, &block) unless node.right.nil?
+
+    if block_given?
+      values.push(yield node)
+    else
+      values << node.data
+    end
+
+    values
+  end
+
   def height(node)
     return -1 if node.nil?
 
@@ -156,4 +202,5 @@ binary_search_tree.insert(1000)
 # binary_search_tree.pretty_print
 # binary_search_tree.insert(2)
 binary_search_tree.pretty_print
-p binary_search_tree.level_order_rec
+p binary_search_tree.postorder
+p binary_search_tree.postorder { |item| item.data * 2 }
