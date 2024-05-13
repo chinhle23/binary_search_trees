@@ -82,9 +82,9 @@ class Tree
     return root if value == root.data
 
     if value < root.data
-      root.left = find(value, root.left)
+      find(value, root.left)
     elsif value > root.data
-      root.right = find(value, root.right)
+      find(value, root.right)
     end
   end
 
@@ -179,6 +179,18 @@ class Tree
     [height(node.left), height(node.right)].max + 1
   end
 
+  def depth(node, root = @root)
+    return nil if node.nil?
+
+    return 0 if node == root || root.nil?
+
+    if node.data < root.data
+      depth(node, root.left) + 1
+    elsif node.data > root.data
+      depth(node, root.right) + 1
+    end
+  end
+
   private
 
   def min_value(root)
@@ -197,10 +209,7 @@ array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 
 binary_search_tree = Tree.new(array)
 binary_search_tree.insert(1000)
-# binary_search_tree.pretty_print
-# binary_search_tree.delete(1)
-# binary_search_tree.pretty_print
-# binary_search_tree.insert(2)
 binary_search_tree.pretty_print
-p binary_search_tree.postorder
-p binary_search_tree.postorder { |item| item.data * 2 }
+node = binary_search_tree.find(1)
+p node
+p binary_search_tree.depth(node)
