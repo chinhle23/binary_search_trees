@@ -191,6 +191,25 @@ class Tree
     end
   end
 
+  def balanced?(queue = [], node = @root)
+    return if node.nil?
+
+    queue << node
+
+    until queue.empty?
+      current_node = queue.shift
+      left_height = current_node.left.nil? ? 0 : height(current_node.left)
+      right_height = current_node.right.nil? ? 0 : height(current_node.right)
+
+      return false if (left_height - right_height).abs > 1
+
+      queue.push(current_node.left) unless current_node.left.nil?
+      queue.push(current_node.right) unless current_node.right.nil?
+    end
+
+    true
+  end
+
   private
 
   def min_value(root)
@@ -210,6 +229,6 @@ array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 binary_search_tree = Tree.new(array)
 binary_search_tree.insert(1000)
 binary_search_tree.pretty_print
-node = binary_search_tree.find(1)
-p node
-p binary_search_tree.depth(node)
+p binary_search_tree.height(binary_search_tree.find(6346))
+p binary_search_tree.height(binary_search_tree.find(324))
+p binary_search_tree.balanced?
